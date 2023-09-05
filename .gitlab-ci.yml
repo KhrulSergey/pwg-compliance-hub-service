@@ -1,0 +1,31 @@
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-v$CI_PIPELINE_IID
+  HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_BRANCH.quantumobile.com
+  KUBE_CONTEXT: "smdgroup/quantumobile/cicd_repository:ibm-dev"
+
+stages:
+  - build_and_test
+  - push_into_registry
+  - deploy
+  - regression
+  
+build_and_test_image:
+  stage: build_and_test
+  variables: 
+    DOCKER_COMPOSE_PATH: cicd_repository/docker-compose/$CI_COMMIT_BRANCH/$CI_PROJECT_NAME/
+  tags:
+    - build-agent
+  script:
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/smdgroup/quantumobile/cicd_repository.git
+    - cp $DOCKER_COMPOSE_PATH/docker-compose.yml docker-compose-deploy.yml
+    - cp env.example .env   
+    - docker-compose -f docker-compose-deploy.yml down
+    - docker-compose -f docker-compose-deploy.yml build --build-arg PW_GITLAB_USER_LOGIN=gitlab-ci-token --build-arg PW_GITLAB_USER_TOKEN=$CI_JOB_TOKEN --no-cache
+    - docker-compose -f docker-compose-deploy.yml up -d
+    - go test -v -race ./... -coverpkg=./... -coverprofile cover.out || (docker-compose -f docker-compose-deploy.yml down && exit 1)
+    - go tool cover -func cover.out | grep "total:"  || (docker-compose -f docker-compose-deploy.yml down && exit 1)
+    - docker-compose -f docker-compose-deploy.yml down
+  only:
+    refs:
+      - main
+     

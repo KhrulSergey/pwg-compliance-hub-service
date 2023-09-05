@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  compliance-service:
+    container_name: compliance-hub-service
+    build:
+      context: .
+      target: release
+      dockerfile: Dockerfile
+      args:
+        - PW_GITLAB_USER_LOGIN=${PW_GITLAB_USER_LOGIN}
+        - PW_GITLAB_USER_TOKEN=${PW_GITLAB_USER_TOKEN}
+    image: compliance-hub-service
+    volumes:
+      - "./:/app"
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "7003:7003"
+      - "7103:7103"

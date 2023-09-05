@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+package compliance_service;
+option go_package = "./compliance_hub_service";
+
+
+extend google.protobuf.EnumValueOptions {
+  optional string name = 50000;
+  optional string display_value = 51234;
+}
+
+enum PwgEntityType {
+  USERS_ACCOUNT = 0 [(name) = "PwgEntityUsersAccount", (display_value) = "usersAccount"];
+  INSTITUTION = 1 [(name) = "PwgEntityInstitution", (display_value) = "institution"];
+}
+
+enum KYCProviderType {
+  FINCLUSIVE = 0 [(name) = "KYCProviderFinclusive", (display_value) = "finclusive"];
+  PWG_MOCK = 1 [(name) = "KYCProviderPwgMock", (display_value) = "pwgMock"];
+}
+
+enum ComplianceStatusType {
+  CREATED = 0 [(name) = "ComplianceStatusCreated", (display_value) = "created"];
+  REJECTED = 1 [(name) = "ComplianceStatusRejected", (display_value) = "rejected"];
+  ACTION_REQUIRED = 2 [(name) = "ComplianceStatusActionRequired", (display_value) = "actionRequired"];
+  FAILED = 3 [(name) = "ComplianceStatusFailed", (display_value) = "failed"];
+  PENDING = 4 [(name) = "ComplianceStatusPending", (display_value) = "pending"];
+  PASSED = 5 [(name) = "ComplianceStatusPassed", (display_value) = "passed"];
+}

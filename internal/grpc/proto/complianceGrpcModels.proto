@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/timestamp.proto";
+import "internal/grpc/proto/complianceGrpcEnums.proto";
+
+package compliance_service;
+option go_package = "./compliance_hub_service";
+
+message ComplianceCheckRequestDto {
+  string pwgEntityGuid = 1;
+  PwgEntityType pwgEntityType = 2;
+  ComplianceEntity complianceEntity = 3;
+  KYCProviderType complianceProvider = 4;
+  repeated ComplianceCheckRule checkRules = 5;
+}
+
+message ComplianceCheckShortResponseDto {
+  string    complianceExternalGuid = 1;
+  ComplianceStatusType complianceStatus = 2;
+}
+
+message ComplianceCheckResponseDto {
+  string complianceExternalGuid = 1;
+  string pwgEntityGuid = 2;
+  PwgEntityType pwgEntityType = 3;
+  ComplianceEntity complianceEntity = 4;
+  KYCProviderType complianceProvider = 5;
+  repeated ComplianceCheckRule checkRules = 6;
+  ComplianceStatusType complianceStatus = 7;
+  google.protobuf.Timestamp passedAt = 8;
+  google.protobuf.Timestamp expiredAt = 9;
+  google.protobuf.Timestamp timestamp = 10;
+}
+
+message ErrorOutput  {
+  int32    code = 1;
+  string message = 2;
+}
+
+message ComplianceCheckRule {
+  string name = 1;
+  string description = 2;
+  string result = 3;
+  string details = 4;
+}
+
+message ComplianceEntity {
+  Institution      institution = 1;
+  IndividualPerson individualPerson = 2;
+}
+
+message Institution {
+  string institutionPwgGuid = 1;
+  string legalName = 2;
+  Address companyAddress = 3;
+  repeated IndividualPerson controlPersons = 4;
+}
+
+message IndividualPerson {
+  string userPwgGuid = 1;
+  string firstName = 2;
+  string lastName = 3;
+  Address address = 4;
+}
+
+message Address {
+  string full_address = 1;
+  string city = 2;
+  string state = 3;
+  string postalCode = 4;
+  string isoCountryCode = 5;
+}
