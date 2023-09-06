@@ -18,6 +18,7 @@ type ComplianceService interface {
 	CreateRequestAndCheckCompliance(checkRequestDto *dto.ComplianceCheckRequestDto) (dto.ComplianceCheckShortResponseDto, error)
 	GetAllUnfinishedComplianceRequest() ([]model.ComplianceCheckRequest, error)
 	UpdateComplianceRequest(checkRequest *model.ComplianceCheckRequest, checkResponseDto *dto.ComplianceCheckResponseDto) error
+	StartScheduler(errCh chan<- error)
 }
 
 // complianceService wrapper for the interface implementation
@@ -27,6 +28,7 @@ type complianceService struct {
 	accountOperatorServiceClient AccountOperatorServiceClient
 	externalComplianceService    ExternalComplianceService
 	updateTaskIndex              int64
+	scheduler                    *gocron.Scheduler
 }
 
 // InitComplianceService constructs an instance of the Auth ComplianceService
@@ -39,25 +41,30 @@ func InitComplianceService(logger logger.Logger, complianceStorage storage.Compl
 		accountOperatorServiceClient: accountOperatorServiceClient,
 		updateTaskIndex:              0,
 	}
-	// Schedule updateComplianceRequestStatusesTask to run every 10 second
-	s := gocron.NewScheduler(time.UTC)
+	return cs
+}
 
+func (cs *complianceService) StartScheduler(errCh chan<- error) {
+	if cs.scheduler != nil {
+		//we already start schedule task
+		return
+	}
+	// Schedule updateComplianceRequestStatusesTask to run every 10 second
+	cs.scheduler = gocron.NewScheduler(time.UTC)
 	go func() {
 		// Wait for 1 minute before starting the task
 		<-time.After(10 * time.Second)
 		// Schedule the task to run every minute
-		job, err := s.Every(10).Second().Do(cs.updateComplianceRequestStatusesTask)
+		job, err := cs.scheduler.Every(10).Second().Do(cs.updateComplianceRequestStatusesTask)
 		if err != nil {
 			// handle the error related to setting up the job
 			cs.logger.Error("updateComplianceRequestStatusesTask couldn't run. Check code")
-			panic(err)
+			errCh <- err
 		} else {
 			cs.logger.Info("updateComplianceRequestStatusesTask was started successfully, job id: ", job)
 		}
 	}()
-
-	s.StartAsync()
-	return cs
+	cs.scheduler.StartAsync()
 }
 
 //todo run schedule task in async way. Here example
@@ -107,7 +114,7 @@ func (cs *complianceService) CreateRequestAndCheckCompliance(checkRequestDto *dt
 		checkRequestDto.PwgEntityGuid, checkRequestDto.PwgEntityType, checkRequestDto.Provider)
 	requestEntity := mapper.ToComplianceRequestEntity(*checkRequestDto)
 
-	//todo reveal validation and check if data is the same
+	//todo reveal validation and check if data is the same https://smdgroup.atlassian.net/browse/FRS-125
 	////check if requests already existed in DB
 	//existedRequestEntity, _ := cs.complianceStorage.FindComplianceCheckRequest(requestEntity.PwgEntityGuid, requestEntity.PwgEntityType)
 	//if existedRequestEntity != nil {

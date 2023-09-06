@@ -17,6 +17,33 @@ var (
 )
 
 func InitGormDB(config *config.DBConfig) (*gorm.DB, error) {
+	//connectionString := fmt.Sprintf(
+	//	"host=%s port=%s user=%s password=%s dbname=%s %s",
+	//	config.DatabaseHost,
+	//	config.DatabasePort,
+	//	config.DatabaseUser,
+	//	config.DatabasePassword,
+	//	config.DatabaseName,
+	//	sslConnectionParams(config.DatabaseRootCA),
+	//)
+	//conn, err := gorm.Open(
+	//	postgres.New(
+	//		postgres.Config{
+	//			DSN: connectionString,
+	//		},
+	//	),
+	//	&gorm.Config{},
+	//)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//db, err := conn.DB()
+	//if err != nil {
+	//	return nil, err
+	//}
+	//db.SetConnMaxLifetime(time.Second * time.Duration(config.ConnMaxLifeTime))
+	//return conn, err
+
 	connectionString := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s %s",
 		config.DatabaseHost,

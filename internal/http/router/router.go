@@ -33,8 +33,8 @@ type AppRouterHandler struct {
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 //
 // Deprecated
-// InitRouterHandler constructs a router
-func InitRouterHandler(logger logger.Logger, appConfig config.AppConfig, complianceController *rest.ComplianceController) *AppRouterHandler {
+// NewRouterHandler constructs a router
+func NewRouterHandler(logger logger.Logger, appConfig config.AppConfig, complianceController *rest.ComplianceController) *AppRouterHandler {
 	return &AppRouterHandler{
 		complianceController: complianceController,
 		logger:               logger,

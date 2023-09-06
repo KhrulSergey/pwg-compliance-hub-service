@@ -10,7 +10,7 @@ import (
 )
 
 type Server interface {
-	Run() error
+	Run(errCh chan<- error) error
 	GracefulStop()
 }
 
@@ -43,19 +43,19 @@ func (s *grpcServer) register() {
 }
 
 // Run runs grpc grpcServer
-func (s *grpcServer) Run() error {
+func (s *grpcServer) Run(errCh chan<- error) error {
 
 	addr := net.JoinHostPort(s.grpcHost, s.grpcPort)
 	s.logger.Infof("Grpc service started on '%s'", addr)
 
-	l, err := net.Listen("tcp", addr)
+	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
 	}
 
-	if err := s.rpcSrv.Serve(l); err != nil {
-		return err
-	}
+	go func() {
+		errCh <- s.rpcSrv.Serve(listener)
+	}()
 	return nil
 }
 
