@@ -7,5 +7,5 @@ import "internal/grpc/proto/complianceGrpcModels.proto";
 option go_package = "./compliance_hub_service";
 
 service ComplianceGrpcService {
-  rpc CheckCompliance(ComplianceCheckRequestDto) returns (ComplianceCheckShortResponseDto);
+  rpc CheckCompliance(ComplianceCheckRequestRpc) returns (ComplianceCheckShortResponseRpc);
 }

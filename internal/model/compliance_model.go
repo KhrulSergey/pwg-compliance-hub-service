@@ -39,7 +39,7 @@ type ComplianceCheckRequest struct {
 	PwgEntityType       enum.PwgEntityType            `gorm:"pwg_entity_type;not null;default:'users_account'"`
 	RequestExternalGuid string                        `gorm:"request_external_guid;not null;"`
 	Provider            enum.KYCProviderType          `gorm:"provider;not null;"`
-	CheckRules          []dto.ComplianceCheckRule     `gorm:"type:jsonb;serializer:json"`
+	CheckRules          []dto.ComplianceCheckRuleDto  `gorm:"type:jsonb;serializer:json"`
 	RawRequest          dto.ComplianceCheckRequestDto `gorm:"type:jsonb;serializer:json"`
 	Status              enum.ComplianceStatusType     `gorm:"status;not null;"`
 	RequestedAt         time.Time                     `gorm:"requested_at;not null;"`

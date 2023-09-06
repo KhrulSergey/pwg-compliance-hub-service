@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ComplianceGrpcServiceClient interface {
-	CheckCompliance(ctx context.Context, in *ComplianceCheckRequestDto, opts ...grpc.CallOption) (*ComplianceCheckShortResponseDto, error)
+	CheckCompliance(ctx context.Context, in *ComplianceCheckRequestRpc, opts ...grpc.CallOption) (*ComplianceCheckShortResponseRpc, error)
 }
 
 type complianceGrpcServiceClient struct {
@@ -37,8 +37,8 @@ func NewComplianceGrpcServiceClient(cc grpc.ClientConnInterface) ComplianceGrpcS
 	return &complianceGrpcServiceClient{cc}
 }
 
-func (c *complianceGrpcServiceClient) CheckCompliance(ctx context.Context, in *ComplianceCheckRequestDto, opts ...grpc.CallOption) (*ComplianceCheckShortResponseDto, error) {
-	out := new(ComplianceCheckShortResponseDto)
+func (c *complianceGrpcServiceClient) CheckCompliance(ctx context.Context, in *ComplianceCheckRequestRpc, opts ...grpc.CallOption) (*ComplianceCheckShortResponseRpc, error) {
+	out := new(ComplianceCheckShortResponseRpc)
 	err := c.cc.Invoke(ctx, ComplianceGrpcService_CheckCompliance_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (c *complianceGrpcServiceClient) CheckCompliance(ctx context.Context, in *C
 // All implementations must embed UnimplementedComplianceGrpcServiceServer
 // for forward compatibility
 type ComplianceGrpcServiceServer interface {
-	CheckCompliance(context.Context, *ComplianceCheckRequestDto) (*ComplianceCheckShortResponseDto, error)
+	CheckCompliance(context.Context, *ComplianceCheckRequestRpc) (*ComplianceCheckShortResponseRpc, error)
 	mustEmbedUnimplementedComplianceGrpcServiceServer()
 }
 
@@ -58,7 +58,7 @@ type ComplianceGrpcServiceServer interface {
 type UnimplementedComplianceGrpcServiceServer struct {
 }
 
-func (UnimplementedComplianceGrpcServiceServer) CheckCompliance(context.Context, *ComplianceCheckRequestDto) (*ComplianceCheckShortResponseDto, error) {
+func (UnimplementedComplianceGrpcServiceServer) CheckCompliance(context.Context, *ComplianceCheckRequestRpc) (*ComplianceCheckShortResponseRpc, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckCompliance not implemented")
 }
 func (UnimplementedComplianceGrpcServiceServer) mustEmbedUnimplementedComplianceGrpcServiceServer() {}
@@ -75,7 +75,7 @@ func RegisterComplianceGrpcServiceServer(s grpc.ServiceRegistrar, srv Compliance
 }
 
 func _ComplianceGrpcService_CheckCompliance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ComplianceCheckRequestDto)
+	in := new(ComplianceCheckRequestRpc)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func _ComplianceGrpcService_CheckCompliance_Handler(srv interface{}, ctx context
 		FullMethod: ComplianceGrpcService_CheckCompliance_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComplianceGrpcServiceServer).CheckCompliance(ctx, req.(*ComplianceCheckRequestDto))
+		return srv.(ComplianceGrpcServiceServer).CheckCompliance(ctx, req.(*ComplianceCheckRequestRpc))
 	}
 	return interceptor(ctx, in, info, handler)
 }

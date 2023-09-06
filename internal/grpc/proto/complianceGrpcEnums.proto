@@ -12,20 +12,23 @@ extend google.protobuf.EnumValueOptions {
 }
 
 enum PwgEntityType {
-  USERS_ACCOUNT = 0 [(name) = "PwgEntityUsersAccount", (display_value) = "usersAccount"];
-  INSTITUTION = 1 [(name) = "PwgEntityInstitution", (display_value) = "institution"];
+  NULL_ENTITY = 0;
+  USERS_ACCOUNT = 1 [(name) = "PwgEntityUsersAccount", (display_value) = "usersAccount"];
+  INSTITUTION = 2 [(name) = "PwgEntityInstitution", (display_value) = "institution"];
 }
 
 enum KYCProviderType {
-  FINCLUSIVE = 0 [(name) = "KYCProviderFinclusive", (display_value) = "finclusive"];
-  PWG_MOCK = 1 [(name) = "KYCProviderPwgMock", (display_value) = "pwgMock"];
+  NULL_PROVIDER = 0;
+  FINCLUSIVE = 1 [(name) = "KYCProviderFinclusive", (display_value) = "finclusive"];
+  PWG_MOCK = 2 [(name) = "KYCProviderPwgMock", (display_value) = "pwgMock"];
 }
 
 enum ComplianceStatusType {
-  CREATED = 0 [(name) = "ComplianceStatusCreated", (display_value) = "created"];
-  REJECTED = 1 [(name) = "ComplianceStatusRejected", (display_value) = "rejected"];
-  ACTION_REQUIRED = 2 [(name) = "ComplianceStatusActionRequired", (display_value) = "actionRequired"];
-  FAILED = 3 [(name) = "ComplianceStatusFailed", (display_value) = "failed"];
-  PENDING = 4 [(name) = "ComplianceStatusPending", (display_value) = "pending"];
-  PASSED = 5 [(name) = "ComplianceStatusPassed", (display_value) = "passed"];
+  NULL_STATUS = 0;
+  CREATED = 1 [(name) = "ComplianceStatusCreated", (display_value) = "created"];
+  REJECTED = 2 [(name) = "ComplianceStatusRejected", (display_value) = "rejected"];
+  ACTION_REQUIRED = 3 [(name) = "ComplianceStatusActionRequired", (display_value) = "actionRequired"];
+  FAILED = 4 [(name) = "ComplianceStatusFailed", (display_value) = "failed"];
+  PENDING = 5 [(name) = "ComplianceStatusPending", (display_value) = "pending"];
+  PASSED = 6 [(name) = "ComplianceStatusPassed", (display_value) = "passed"];
 }
