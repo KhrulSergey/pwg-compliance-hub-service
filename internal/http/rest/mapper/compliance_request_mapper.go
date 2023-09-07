@@ -7,12 +7,6 @@ import (
 )
 
 func ToComplianceRequestEntity(requestDto dto.ComplianceCheckRequestDto) model.ComplianceCheckRequest {
-	//todo process ComplianceCheckRequest.rules
-	//rules := make([]handler.ReviewResultRule, 0, len(result.Rules))
-	//for i := range result.Rules {
-	//	rules = append(rules, toHandlerReviewResultRule(result.Rules[i]))
-	//}
-
 	return model.ComplianceCheckRequest{
 		PwgEntityGuid: requestDto.PwgEntityGuid,
 		PwgEntityType: requestDto.PwgEntityType,

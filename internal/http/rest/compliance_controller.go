@@ -10,10 +10,14 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-// ComplianceController is responsible for processing request and applying the business logic
 type ComplianceController struct {
 	logger            logger.Logger
 	complianceService service.ComplianceService
+}
+
+type ErrorOutput struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 }
 
 // Deprecated
@@ -42,7 +46,7 @@ func (l *ComplianceController) CheckCompliance(ctx *fasthttp.RequestCtx) {
 	var inputRequestDto dto.ComplianceCheckRequestDto
 	err := json.Unmarshal(ctx.PostBody(), &inputRequestDto)
 	if err != nil {
-		errBody := service.ErrorOutput{
+		errBody := ErrorOutput{
 			Code:    fasthttp.StatusBadRequest,
 			Message: fmt.Sprintf("Bad Request [%v]", err),
 		}

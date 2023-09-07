@@ -39,7 +39,7 @@ type ComplianceCheckRuleDto struct {
 	Details     string `json:"details"`
 }
 
-// ComplianceEntityDto represent model that will be sent to kyc/kyb check to provider
+// ComplianceEntityDto represent object and its personal data that will be sent to kyc/kyb check to provider
 type ComplianceEntityDto struct {
 	Institution      *InstitutionDto      `json:"institution,omitempty"`
 	IndividualPerson *IndividualPersonDto `json:"individualPerson,omitempty"`

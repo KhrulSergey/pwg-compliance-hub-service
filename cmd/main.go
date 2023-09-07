@@ -88,7 +88,6 @@ func initializeDependencies() error {
 
 	//Define new database
 	{
-		// Define new database
 		dbConfig, err = config.NewDBConfig()
 		if err != nil {
 			appLogger.Fatalf("Unable to read database configuration: %v", err)
@@ -105,7 +104,7 @@ func initializeDependencies() error {
 		}
 	}
 
-	// Define Compliance Repository
+	// Define Repository
 	complianceRepository = storage.InitComplianceRepository(dbConnector, appLogger)
 
 	//Define service for interact with different compliance providers
@@ -114,7 +113,7 @@ func initializeDependencies() error {
 	//Define service-client for interact with AO-service
 	accountOperatorServiceClient = service.InitAccountOperatorServiceClient(appLogger)
 
-	// Define Compliance ComplianceService
+	// Define main services
 	complianceService = service.InitComplianceService(appLogger, complianceRepository,
 		externalComplianceService, accountOperatorServiceClient)
 

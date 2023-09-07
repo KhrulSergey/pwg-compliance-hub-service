@@ -94,11 +94,3 @@ func (cr *complianceRepository) UpdateComplianceCheckRequest(checkRequest *model
 	}
 	return nil
 }
-
-func (cr *complianceRepository) SaveCompliance(c *model.Compliance) error {
-	result := cr.dbConnector.Create(c)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
-}
