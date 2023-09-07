@@ -1,0 +1,126 @@
+definitions:
+  dto.Address:
+    properties:
+      city:
+        type: string
+      full_address:
+        type: string
+      isoCountryCode:
+        type: string
+      postalCode:
+        type: string
+      state:
+        type: string
+    type: object
+  dto.ComplianceCheckRequestDto:
+    properties:
+      checkRules:
+        items:
+          $ref: '#/definitions/dto.ComplianceCheckRule'
+        type: array
+      complianceEntity:
+        $ref: '#/definitions/dto.ComplianceEntity'
+      complianceProvider:
+        $ref: '#/definitions/enum.KYCProviderType'
+      pwgEntityGuid:
+        type: string
+      pwgEntityType:
+        $ref: '#/definitions/enum.PwgEntityType'
+    type: object
+  dto.ComplianceCheckRule:
+    properties:
+      description:
+        type: string
+      details:
+        type: string
+      name:
+        type: string
+      result:
+        type: string
+    type: object
+  dto.ComplianceEntity:
+    properties:
+      individualPerson:
+        $ref: '#/definitions/dto.IndividualPerson'
+      institution:
+        $ref: '#/definitions/dto.Institution'
+    type: object
+  dto.IndividualPerson:
+    properties:
+      address:
+        $ref: '#/definitions/dto.Address'
+      firstName:
+        type: string
+      lastName:
+        type: string
+      userPwgGuid:
+        type: string
+    type: object
+  dto.Institution:
+    properties:
+      companyAddress:
+        $ref: '#/definitions/dto.Address'
+      controlPersons:
+        items:
+          $ref: '#/definitions/dto.IndividualPerson'
+        type: array
+      institutionPwgGuid:
+        type: string
+      legalName:
+        type: string
+    type: object
+  enum.KYCProviderType:
+    enum:
+    - finclusive
+    - pwgMock
+    type: string
+    x-enum-varnames:
+    - KYCProviderFinclusive
+    - KYCProviderPwgMock
+  enum.PwgEntityType:
+    enum:
+    - usersAccount
+    - institution
+    type: string
+    x-enum-varnames:
+    - PwgEntityUsersAccount
+    - PwgEntityInstitution
+  service.ErrorOutput:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /checkCompliance:
+    post:
+      consumes:
+      - application/json
+      description: Send request for compliance check
+      parameters:
+      - description: object to update
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ComplianceCheckRequestDto'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorOutput'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorOutput'
+      security:
+      - JWT: []
+      summary: Send request for compliance check
+      tags:
+      - compliance
+swagger: "2.0"

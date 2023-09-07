@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package compliance_service;
+
+import "internal/grpc/proto/complianceGrpcModels.proto";
+
+option go_package = "./compliance_hub_service";
+
+service ComplianceGrpcService {
+  rpc CheckCompliance(ComplianceCheckRequestRpc) returns (ComplianceCheckShortResponseRpc);
+}
